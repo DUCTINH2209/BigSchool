@@ -20,6 +20,7 @@ namespace _2011068542_NguyenDucTinh.Controllers
         {
         }
 
+
         public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
