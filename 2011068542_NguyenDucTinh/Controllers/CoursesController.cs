@@ -1,5 +1,6 @@
 ﻿using _2011068542_NguyenDucTinh.Models;
 using _2011068542_NguyenDucTinh.ViewModels;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,28 @@ namespace _2011068542_NguyenDucTinh.Controllers
                 Categories = _dbContext.Categories.ToList()
             };
             return View(viewModel);
+        }
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(CourseViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                viewModel.Categories = _dbContext.Categories.ToList();
+                return View("Create", viewModel);
+            }
+            var course = new Course
+            {
+                LecturerId = User.Identity.GetUserId(),
+                DateTime = viewModel.GetDateTime(),
+                CategoryID = viewModel.Category,
+                Place = viewModel.Place,
+            };
+            _dbContext.Courses.Add(course);
+            _dbContext.SaveChanges();
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }
